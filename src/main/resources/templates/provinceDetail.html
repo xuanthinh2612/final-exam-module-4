@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Province Detail</title>
+</head>
+<body>
+<h1 align="center">Province Detail</h1>
+
+<table th:object="${province}">
+    <tr>
+        <td><b><span th:text="*{cityName}"></span></b></td>
+        <td><h3><a href="/createNew">Thêm Thành phố</a></h3></td>
+    </tr>
+    <tr>
+        <td colspan="2" th:text="'Tên: '+*{cityName}"></td>
+    </tr>
+    <tr>
+        <td colspan="2" th:text="'Quốc Gia: '+*{national.name}"></td>
+    </tr>
+    <tr>
+        <td colspan="2" th:text="'Diện tích: '+*{area}"></td>
+    </tr>
+    <tr>
+        <td colspan="2" th:text="'Dân Số: '+*{population}"></td>
+    </tr>
+    <tr>
+        <td colspan="2" th:text = "'GDP: '+*{jdp}"></td>
+    </tr>
+    <tr>
+        <td colspan="2">Giới Thiệu</td>
+    </tr>
+    <tr>
+        <td colspan="2" rowspan="2" th:text="*{description}"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><a th:href="@{/edit/{id}(id=${province.id})}">Chỉnh Sửa</a><a th:href="@{/delete/{id}(id=${province.id})}">Xóa</a>></td>
+    </tr>
+</table>
+</body>
+</html>
