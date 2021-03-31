@@ -47,7 +47,7 @@ public class ProvinceController {
 
     @GetMapping("/createNew")
     public ModelAndView ShowCreateForm() {
-        List<National> nationalList =  nationalService.findALl();
+        List<National> nationalList = nationalService.findALl();
         ModelAndView modelAndView = new ModelAndView("create");
         modelAndView.addObject("province", new Province());
         modelAndView.addObject("nationalList", nationalList);
@@ -59,8 +59,9 @@ public class ProvinceController {
     public ModelAndView createNew(@Validated @ModelAttribute Province province, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("create");
-        }else {
+            List<National> nationalList = nationalService.findALl();
+            return new ModelAndView("create","nationalList",nationalList);
+        } else {
             provinceService.save(province);
             return new ModelAndView("redirect:/showList");
         }
@@ -68,22 +69,33 @@ public class ProvinceController {
     }
 
     @GetMapping("/edit/{id}")
-    public ModelAndView showUpdateForm(@PathVariable Long id){
-
+    public ModelAndView showUpdateForm(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("create");
+        List<National> nationalList = nationalService.findALl();
         Province province = provinceService.findById(id);
-        return new ModelAndView("create","province",province);
+        modelAndView.addObject("province", province);
+        modelAndView.addObject("nationalList", nationalList);
+        return modelAndView;
 
     }
-//
-//    @PostMapping("/edit")
-//    public ModelAndView update(@ModelAttribute Province province, BindingResult bindingResult){
-//        if (bindingResult.hasErrors()) {
-//            return new ModelAndView("create");
-//        }else {
-//            provinceService.save(province);
-//            return new ModelAndView("redirect:/showList");
-//        }
-//
-//    }
+
+    @PostMapping("/edit/{id}")
+    public ModelAndView update(@PathVariable Long id, @Validated @ModelAttribute Province province, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<National> nationalList = nationalService.findALl();
+            return new ModelAndView("create","nationalList",nationalList);
+        } else {
+            province.setId(id);
+            provinceService.save(province);
+            return new ModelAndView("redirect:/showList");
+        }
+
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id){
+        provinceService.deleteById(id);
+        return "redirect:/showList";
+    }
 
 }
